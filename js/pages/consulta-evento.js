@@ -131,43 +131,43 @@ window.Pages.ConsultaEvento = function() {
                     
                     const questionLabel = window.PERGUNTAS_MAP && window.PERGUNTAS_MAP[key] ? window.PERGUNTAS_MAP[key] : key.replace(/_/g, ' ');
                     
-                    respostasHtml += \`
+                    respostasHtml += `
                         <div style="padding: 0.75rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; gap: 1rem; align-items: center;">
-                            <span style="font-size: 0.9rem; color: var(--text-muted); flex: 1;">\${questionLabel}</span>
-                            <span style="font-weight: 600; font-size: 0.95rem; text-align: right; min-width: 120px;">\${displayVal}</span>
+                            <span style="font-size: 0.9rem; color: var(--text-muted); flex: 1;">${questionLabel}</span>
+                            <span style="font-weight: 600; font-size: 0.95rem; text-align: right; min-width: 120px;">${displayVal}</span>
                         </div>
-                    \`;
+                    `;
                 }
             }
             
-            const modalHtml = \`
+            const modalHtml = `
                 <div id="eventoModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;">
                     <div class="card fade-in" style="width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; background: var(--surface);">
                         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
-                            <h3 style="margin: 0; color: var(--primary);"><i class="fas fa-clipboard-list"></i> Detalhes do Evento (\${e.codigo})</h3>
+                            <h3 style="margin: 0; color: var(--primary);"><i class="fas fa-clipboard-list"></i> Detalhes do Evento (${e.codigo})</h3>
                             <button onclick="document.getElementById('eventoModal').remove()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
                         </div>
                         
                         <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Informações Básicas</h4>
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <div><strong>Nome:</strong> \${e.nome_evento}</div>
-                            <div><strong>Porte:</strong> \${e.porteFinal}</div>
-                            <div><strong>Data:</strong> \${e.data_inicio} até \${e.data_termino}</div>
-                            <div><strong>Público:</strong> \${e.publico} pessoas</div>
-                            <div><strong>Responsável:</strong> \${cliente.razao_social}</div>
-                            <div><strong>Endereço:</strong> \${e.logradouro_evento}, \${e.numero_evento}</div>
+                            <div><strong>Nome:</strong> ${e.nome_evento}</div>
+                            <div><strong>Porte:</strong> <span style="text-transform: capitalize;">${e.porteFinal}</span></div>
+                            <div><strong>Data:</strong> ${e.data_inicio} até ${e.data_termino}</div>
+                            <div><strong>Público:</strong> ${e.publico} pessoas</div>
+                            <div><strong>Responsável:</strong> ${cliente.razao_social}</div>
+                            <div><strong>Endereço:</strong> ${e.logradouro_evento}, ${e.numero_evento}</div>
                         </div>
                         
                         <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Quadro de Áreas</h4>
                         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <div><strong>Total:</strong> \${e.area_total} m²</div>
-                            <div><strong>Permanente:</strong> \${e.area_permanente} m²</div>
-                            <div><strong>Provisória:</strong> \${e.area_provisoria} m²</div>
+                            <div><strong>Total:</strong> ${e.area_total} m²</div>
+                            <div><strong>Permanente:</strong> ${e.area_permanente} m²</div>
+                            <div><strong>Provisória:</strong> ${e.area_provisoria} m²</div>
                         </div>
                         
                         <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Respostas do Formulário</h4>
                         <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
-                            \${respostasHtml}
+                            ${respostasHtml}
                         </div>
                         
                         <div style="text-align: center; margin-top: 2rem;">
@@ -175,7 +175,7 @@ window.Pages.ConsultaEvento = function() {
                         </div>
                     </div>
                 </div>
-            \`;
+            `;
             
             document.body.insertAdjacentHTML('beforeend', modalHtml);
         };
