@@ -1,0 +1,231 @@
+ 
+ 
+Anexo
+ 
+E
+ 
+-
+ 
+Laudo
+ 
+de
+ 
+Comissionamento
+ EVENTO DE GRANDE PORTE 
+1. IDENTIFICAÇÃO DO EVENTO 
+2. SEGURANÇA CONTRA INCÊNDIO E PÂNICO DO EVENTO Nome do evento: {{NE}} 
+Descrição do evento:  {{DESC}} 
+Início: {{DTI}} Horário: {{HI}} h Encerramento: {{DTE}} Horário: {{HE}} h 
+Protocolo de funcionamento:{{PROT}} 
+Documentação Status 
+O Memorial Técnico de Segurança Contra Incêndio, DRT e croqui apresentados estão de acordo com o evento temporário? {{LADOC}} 
+Os documentos previstos no artigo 34 da IN 24, referentes à execução dos SMSCI e das eventuais estruturas montadas no evento, foram emitidos e estão de acordo com as NSCI²? {{DOCGP}} 
+Estruturas provisórias Status 
+Nas estruturas como tablados, camarotes e estruturas congêneres destinadas ao público, foram previstos guarda-corpos em desníveis superiores a 60 cm de altura do seu piso em relação ao solo, bom como corrimãos nas escadas? {{PROVISORIAGP03}} 
+Instalações de Gás Combustível Status 
+A quantidade de recipientes de GLP está de acordo com o previsto no Memorial Técnico? Os recipientes estão posicionados em locais comprovadamente sem acesso ao público e protegidos das intempéries? {{GLPGP03}} 
+Os aparelhos de queima do GLP estão situados em locais com ventilação natural permanente? {{GLPGP02}} 
+Sistema Preventivo por Extintores Status 
+Informe a quantidade total de extintores instalados no evento (portáteis e sobrerrodas): {{QUAEXT}} extintores. 
+Os extintores estão em condições de uso e de acordo com as NSCI? {{EXTGP1}} 
+Saídas de Emergência Status 
+As saídas de emergência estão de acordo com as NSCI? {{SEGP01}} 
+Todos os ambientes do evento possuem saídas de emergência em quantidade suficiente e dimensionadas para o público previsto para o local, de acordo com a tabela de dimensionamento das saídas de emergência, item 3 do Memorial Técnico de Segurança Contra Incêndio?  {{LASE}} 
+Foram atendidas as larguras mínimas das rotas de fuga horizontais (acessos) e verticais (escadas e rampas)? {{SEGP05}} 
+Foram atendidas as larguras mínimas das portas?  
+As portas de saída são do tipo “de abrir” e têm sentido de abertura igual ao do fluxo de saída? {{SEGP07}} 
+As portas que não abrem no sentido do fluxo de saída permanecerão abertas durante toda a realização do evento? {{SEGP08}} 
+As barras antipânico previstas estão executadas nas portas de saída? {{SEGP09}} 
+Foi executada a área de dispersão? {{SEGP10}} 
+A placa de lotação máxima foi instalada próximo à entrada de cada ambiente com reunião de público do evento? {{SEGP11}} 
+O controle de lotação de público encontra-se instalado? Confirme o tipo: 
+-
+ 
+{{CONTROLE}}
+ 
+Para controle de público automatizado, foi instalado monitor ou placar eletrônico exibindo a lotação existente no local? {{SEGP12}} As distâncias máximas a serem percorridas (caminhamento) estão de acordo com o Memorial Técnico de Segurança Contra Incêndio? {{SEGP13}} 
+As arquibancadas instaladas atendem aos requisitos da IN 9? {{SEGP14}} 
+As rampas instaladas atendem aos requisitos da IN 9? {{SEGP15}} 
+As escadas de emergência instaladas atendem aos requisitos da IN 9? {{SEGP16}} 
+As passarelas instaladas atendem aos requisitos da IN 9? {{SEGP17}} 
+Sistema de Iluminação de Emergência Status 
+Foram instaladas luminárias de emergência em todos os locais com desníveis, mudanças de direção e intersecções de corredores na rota de fuga, etc? Estão todas funcionando? {{LASIE}} 
+A distância máxima entre dois pontos de SIE atende ao limite de quatro vezes a altura de instalação destes em relação ao piso? {{SIEGP03}} 
+Informe a quantidade de luminárias instaladas no evento? {{LUM}} luminárias. 
+Sinalização para Abandono de Local Status 
+Foram instaladas placas de SAL para assinalar todas as mudanças de direção, saídas, obstáculos, etc, de tal forma que em cada ponto de SAL seja possível visualizar o ponto seguinte? {{SALGP02}} 
+As placas indicativas de fluxo previstas no Memorial Técnico de Segurança Contra Incêndio foram instaladas no local? Informe a quantidade de placas instaladas no evento? {{PLACA}} placas. 
+Foram instaladas as placas de SAL conforme as dimensões e distâncias de visualização previstas no Memorial Técnico de Segurança Contra Incêndio? {{LASAL}} 
+Para eventos que se assemelham a boates ou shows musicais quando realizados em locais cobertos e fechados nas laterais, foram instaladas placas luminosas que permanecerão constantemente iluminadas durante todo o evento? {{SALGP05}} 
+Demais normativas Status 
+Foram apresentados os laudos, junto com o DRT de execução/instalação, de todos os materiais de 
+acabamento
+ 
+e
+ 
+revestimento
+ 
+de
+ 
+acordo
+ 
+com
+ 
+os
+ 
+requisitos
+ 
+da
+ 
+IN
+ 
+18
+ 
+-
+ 
+CMAR2
+?
+ {{LADE1}} 
+O grupo motogerador foi instalado prevendo seu isolamento e exaustão de gases da combustão? {{DEMAISGP03}} 
+Os brigadistas previstos no Memorial Técnico de Segurança Contra Incêndio estão certificados/credenciados e permanecerão durante todo o funcionamento do evento?  {{DEMAISGP04}} 
+Foram instalados/executados os parâmetros necessários ao acesso de viaturas, conforme IN 35? {{DEMAISGP05}} 
+Os demais SMSCI necessários para o evento, de acordo com as Tabelas 1 e 2 da IN 24, foram instalados e estão em condições de uso de acordo com as NSCI? {{LADE2}} 
+Prevenção em Espetáculos Pirotécnicos Status 
+Os laudos e documentos previstos na IN 27 referentes a espetáculos pirotécnicos foram emitidos e estão de acordo com as NSCI²? {{LAPIRO1}} 
+Para espetáculos pirotécnicos em ambientes abertos, foi atendido o diâmetro mínimo de segurança da área de queima, em conformidade com a Tabela 1 da IN 27? {{LAPIRO2}} 
+Para espetáculos pirotécnicos em ambientes abertos, foi atendido o afastamento mínimo de segurança entre a área de queima e os espectadores, em conformidade com a Tabela 2 da IN 27? {{LAPIRO3}} 
+Para espetáculos pirotécnicos em ambientes fechados, foram previstos fogos específicos para esse tipo de ambiente, em conformidade com o artigo 9º da IN 27? {{LAPIRO4}} 
+Para espetáculos pirotécnicos em ambientes fechados, foi atendido o afastamento mínimo de segurança, em conformidade com o artigo 26 da IN 27? {{LAPIRO5}}  
+ Equipamentos Status 
+Sendo o público previsto igual ou superior a 1.500 pessoas, está disponível no local do evento um desfibrilador externo automático (DEA) conforme indicado no Memorial Técnico de Segurança Contra Incêndio? {{EQUIPSGP}} 
+Observações3
+:{{OBS}}
+  
+ 
+ 
+ 
+ 
+NOTAS
+ 
+ESPECÍFICAS
+ 
+1
+ 
+NA
+ 
+=
+ 
+Não
+ 
+se
+ 
+aplica
+ 
+2
+ 
+Os
+ 
+documentos
+ 
+físicos
+ 
+dos
+ 
+laudos
+ 
+e
+ 
+DRTs
+ 
+deverão
+ 
+permanecer
+ 
+disponíveis
+ 
+no
+ 
+local
+ 
+do
+ 
+evento
+ 
+para
+ 
+apresentação
+ 
+ao
+ 
+CBMSC
+ 
+em
+ 
+caso
+ 
+de
+ 
+ﬁscalização
+ 
+3
+ 
+Este
+ 
+campo
+ 
+deve
+ 
+ser
+ 
+usado
+ 
+para
+ 
+o
+ 
+preenchimento
+ 
+de
+ 
+características
+ 
+e
+ 
+particularidades
+ 
+do
+ 
+evento
+ 
+e
+ 
+dos
+ 
+SMSCI
+ 3. RESPONSÁVEIS PELO EVENTO 
+   4. TERMO DE RESPONSABILIDADE DO RT 
+ RESPONSÁVEL TÉCNICO PELO LAUDO DE COMISSIONAMENTO Nº documento de RT:{{RT}} 
+Nome:{{RESPTEC}} Nº C. Classe:{{NCCLASSE}} 
+End.: Rua Hermes Zapeline Nº: 513 CEP: 88110050 
+Bairro: Barreiros Cidade: São José 
+Complemento/Ponto de referência: Sala 02 
+E-mail: contato@scfire.com.br Telefone: 48 30936140 
+_____________________________________ Assina tura 
+RESPONSÁVEL PELO EVENTO 
+Nome:{{RESPEVE}} CPF/CNPJ:{{DOCRESPEVE}} 
+End.:{{ENDRESPEVE}} Nº:{{NRRESPEVE}} CEP:{{CEPRESPEVE}} 
+Bairro: {{BAIRESPEVE}} Cidade:{{CIDRESPEVE}} 
+Complemento/Ponto de referência:{{PRRESPEVE}} 
+E-mail:{{EMAILRESPEVE}} Telefone:{{TELRESPEVE}} 
+_____________________________________ Assina tura 
+Declaro junto ao Corpo de Bombeiros Militar de Santa Catarina (CBMSC) que estou ciente e assumo total responsabilidade pelas informações do evento temporário acima descritas, as quais enquadram o evento como sendo de Grande Porte, conforme a Instrução Normativa (IN) 24 do CBMSC. 
+Atesto que estive no local do evento, analisei e constatei que o evento possui segurança, estando todos os SMSCI e eventuais estruturas corretamente previstos, dimensionados, instalados e em pleno funcionamento, de acordo com as NSCI. 
+Declaro ainda estar ciente que o descumprimento das NSCI ou à inveracidade das informações prestadas ensejam infração administrativa, conforme Lei Estadual 13.157/2013, podendo ainda responder civil e criminalmente conforme a legislação vigente. 
+ __________________________, ____/____/____         ________________________________ 
+Local
+ 
+e
+ 
+data
+                                                                                                
+Assina tura 

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SC Fire - Laudos de Eventos Temporários</title>
+    <meta name="description" content="Sistema de emissão de laudos técnicos e termos de responsabilidade para eventos temporários conforme IN 24 CBMSC">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- jsPDF para geração de PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+    <!-- CSS Customizado -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- O conteúdo será renderizado aqui pelo app.js (SPA) -->
+    </div>
+
+    <!-- Application Scripts -->
+    
+    <!-- Data -->
+    <script src="js/data/constants.js?v=2"></script>
+    
+    <!-- Utilities -->
+    <script src="js/utils/formatters.js?v=2"></script>
+    <script src="js/utils/validators.js?v=2"></script>
+    <script src="js/utils/classificador.js?v=2"></script>
+    <script src="js/utils/pdf-generator.js?v=2"></script>
+    
+    <!-- Core -->
+    <script src="js/store.js?v=2"></script>
+    <script src="js/router.js?v=2"></script>
+    
+    <!-- Components -->
+    <script src="js/components/header.js?v=2"></script>
+    
+    <!-- Pages -->
+    <script src="js/pages/dashboard.js?v=2"></script>
+    <script src="js/pages/cadastro-cliente.js?v=2"></script>
+    <script src="js/pages/consulta-cliente.js?v=2"></script>
+    <script src="js/pages/forms-pequeno.js?v=2"></script>
+    <script src="js/pages/forms-medio.js?v=2"></script>
+    <script src="js/pages/forms-grande.js?v=2"></script>
+    <script src="js/pages/cadastro-evento.js?v=2"></script>
+    <script src="js/pages/consulta-evento.js?v=2"></script>
+    
+    <!-- Main App -->
+    <script src="js/app.js?v=2"></script>
+</body>
+</html>
