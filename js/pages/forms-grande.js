@@ -35,7 +35,7 @@ window.FormsGrande = function(state, avancarCallback) {
         const form = document.createElement('form');
         form.id = 'form-grande-porte';
         
-        const totalSteps = 7;
+        const totalSteps = 8;
         let progressHtml = '<div style="display: flex; gap: 4px; margin-bottom: 2rem;">';
         for(let i=1; i<=totalSteps; i++) {
             progressHtml += `<div style="flex: 1; height: 6px; border-radius: 3px; background-color: ${subStep >= i ? 'var(--primary)' : 'var(--border-color)'}"></div>`;
@@ -247,6 +247,36 @@ window.FormsGrande = function(state, avancarCallback) {
                 </div>
             `;
         }
+        else if (subStep === 8) {
+            contentHtml = `
+                <h4 class="mb-3" style="color: var(--primary);">8/8 - Laudo de Comissionamento (Anexo E)</h4>
+                <p class="mb-4" style="color: var(--text-muted); font-size: 0.9rem;">Estas perguntas pertencem ao Anexo E e atestam que os itens já foram instalados e conferidos no local do evento.</p>
+                
+                ${renderQuestion('LADOC', 'O Memorial Técnico de Segurança Contra Incêndio, DRT e croqui apresentados estão de acordo com o evento temporário?')}
+                ${renderQuestion('LASE', 'Todos os ambientes do evento possuem saídas de emergência em quantidade suficiente e dimensionadas para o público previsto para o local, de acordo com a tabela de dimensionamento das saídas de emergência, item 3 do Memorial Técnico de Segurança Contra Incêndio?')}
+                ${renderQuestion('LASIE', 'Foram instaladas luminárias de emergência em todos os locais com desníveis, mudanças de direção e intersecções de corredores na rota de fuga, etc? Estão todas funcionando?')}
+                ${renderQuestion('LASAL', 'Foram instaladas as placas de SAL conforme as dimensões e distâncias de visualização previstas no Memorial Técnico de Segurança Contra Incêndio?')}
+                ${renderQuestion('LADE1', 'Foram apresentados os laudos, junto com o DRT de execução/instalação, de todos os materiais de acabamento e revestimento de acordo com os requisitos da IN 18 - CMAR?')}
+                ${renderQuestion('LADE2', 'Os demais SMSCI necessários para o evento, de acordo com as Tabelas 1 e 2 da IN 24, foram instalados e estão em condições de uso de acordo com as NSCI?')}
+                
+                <h4 class="mb-2 mt-4" style="color: var(--primary); font-size: 1.1rem;">Prevenção em Espetáculos Pirotécnicos</h4>
+                <div class="question-block">
+                    <div class="question-text">Haverá Espetáculo Pirotécnico?</div>
+                    <div class="radio-group mb-2">
+                        <label class="radio-label"><input type="radio" name="TEM_PIRO" value="sim" ${formState['TEM_PIRO'] === 'sim' ? 'checked' : ''} required> Sim</label>
+                        <label class="radio-label"><input type="radio" name="TEM_PIRO" value="nao" ${formState['TEM_PIRO'] === 'nao' ? 'checked' : ''}> Não</label>
+                    </div>
+                </div>
+                
+                <div id="div-piro" class="mt-3 ${formState['TEM_PIRO'] === 'sim' ? '' : 'hidden'}">
+                    ${renderQuestion('LAPIRO1', 'Os laudos e documentos previstos na IN 27 referentes a espetáculos pirotécnicos foram emitidos e estão de acordo com as NSCI?')}
+                    ${renderQuestion('LAPIRO2', 'Para espetáculos pirotécnicos em ambientes abertos, foi atendido o diâmetro mínimo de segurança da área de queima, em conformidade com a Tabela 1 da IN 27?')}
+                    ${renderQuestion('LAPIRO3', 'Para espetáculos pirotécnicos em ambientes abertos, foi atendido o afastamento mínimo de segurança entre a área de queima e os espectadores, em conformidade com a Tabela 2 da IN 27?')}
+                    ${renderQuestion('LAPIRO4', 'Para espetáculos pirotécnicos em ambientes fechados, foram previstos fogos específicos para esse tipo de ambiente, em conformidade com o artigo 9º da IN 27?')}
+                    ${renderQuestion('LAPIRO5', 'Para espetáculos pirotécnicos em ambientes fechados, foi atendido o afastamento mínimo de segurança, em conformidade com o artigo 26 da IN 27?')}
+                </div>
+            `;
+        }
         
         const actionsHtml = `
             <div class="form-actions mt-4">
@@ -292,6 +322,9 @@ window.FormsGrande = function(state, avancarCallback) {
         if(subStep === 6) {
             setupRadioToggle('SALGP03', 'div-pla-qtd', ['PLACA']);
             setupRadioToggle('DEMAISGP04', 'div-brig-qtd', ['BRIG']);
+        }
+        if(subStep === 8) {
+            setupRadioToggle('TEM_PIRO', 'div-piro', []);
         }
         
         document.getElementById('btn-back-sub').addEventListener('click', () => {

@@ -132,5 +132,19 @@ window.PERGUNTAS_MAP = {
     'DEMAISGP07': 'O croqui apresentado contempla todas estruturas e o dimensionamento e localização de todos os SMSCI previstos para o evento, conforme as NSCI?',
     'EQUIPSGP': 'Sendo o público previsto igual ou superior a 1.500 pessoas, foi previsto desfibrilador externo automático (DEA)?',
     'DOCGP': 'Os documentos previstos no Artigo 34 da IN 24, referentes ao dimensionamento dos SMSCI e de eventuais estruturas previstas para o evento, foram emitidos e estão de acordo com as NSCI?',
+    
+    // ANEXO E - LAUDO DE COMISSIONAMENTO (NOVAS PERGUNTAS)
+    'LADOC': 'O Memorial Técnico de Segurança Contra Incêndio, DRT e croqui apresentados estão de acordo com o evento temporário?',
+    'LASE': 'Todos os ambientes do evento possuem saídas de emergência em quantidade suficiente e dimensionadas para o público previsto para o local, de acordo com a tabela de dimensionamento das saídas de emergência, item 3 do Memorial Técnico de Segurança Contra Incêndio?',
+    'LASIE': 'Foram instaladas luminárias de emergência em todos os locais com desníveis, mudanças de direção e intersecções de corredores na rota de fuga, etc? Estão todas funcionando?',
+    'LASAL': 'Foram instaladas as placas de SAL conforme as dimensões e distâncias de visualização previstas no Memorial Técnico de Segurança Contra Incêndio?',
+    'LADE1': 'Foram apresentados os laudos, junto com o DRT de execução/instalação, de todos os materiais de acabamento e revestimento de acordo com os requisitos da IN 18 - CMAR?',
+    'LADE2': 'Os demais SMSCI necessários para o evento, de acordo com as Tabelas 1 e 2 da IN 24, foram instalados e estão em condições de uso de acordo com as NSCI?',
+    'LAPIRO1': 'Os laudos e documentos previstos na IN 27 referentes a espetáculos pirotécnicos foram emitidos e estão de acordo com as NSCI?',
+    'LAPIRO2': 'Para espetáculos pirotécnicos em ambientes abertos, foi atendido o diâmetro mínimo de segurança da área de queima, em conformidade com a Tabela 1 da IN 27?',
+    'LAPIRO3': 'Para espetáculos pirotécnicos em ambientes abertos, foi atendido o afastamento mínimo de segurança entre a área de queima e os espectadores, em conformidade com a Tabela 2 da IN 27?',
+    'LAPIRO4': 'Para espetáculos pirotécnicos em ambientes fechados, foram previstos fogos específicos para esse tipo de ambiente, em conformidade com o artigo 9º da IN 27?',
+    'LAPIRO5': 'Para espetáculos pirotécnicos em ambientes fechados, foi atendido o afastamento mínimo de segurança, em conformidade com o artigo 26 da IN 27?',
+    
     'rt_selecionado': 'Responsável Técnico (RT)'
 };

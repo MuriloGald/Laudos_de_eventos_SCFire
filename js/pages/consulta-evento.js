@@ -60,6 +60,24 @@ window.Pages.ConsultaEvento = function() {
             listContainer.innerHTML = filtered.map(e => {
                 const cliente = window.Store.getCliente(e.cliente_id) || {};
                 
+                let botoesDownload = '';
+                if (Array.isArray(e.arquivo)) {
+                    botoesDownload = `
+                        <button class="btn btn-primary" onclick="alert('Funcionalidade de download será acoplada ao backend/armazenamento posteriormente. Arquivos: ${e.arquivo.join(', ')}')" title="Baixar Anexo D">
+                            <i class="fas fa-file-pdf"></i> Anexo D
+                        </button>
+                        <button class="btn btn-primary" onclick="alert('Funcionalidade de download será acoplada ao backend/armazenamento posteriormente. Arquivos: ${e.arquivo.join(', ')}')" title="Baixar Anexo E">
+                            <i class="fas fa-file-pdf"></i> Anexo E
+                        </button>
+                    `;
+                } else {
+                    botoesDownload = `
+                        <button class="btn btn-primary" onclick="alert('Funcionalidade de download será acoplada ao backend/armazenamento posteriormente. Arquivo: ${e.arquivo}')" title="Baixar Laudo">
+                            <i class="fas fa-download"></i> Baixar
+                        </button>
+                    `;
+                }
+                
                 return `
                 <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; border-left: 4px solid var(--primary);">
                     <div>
@@ -73,8 +91,12 @@ window.Pages.ConsultaEvento = function() {
                         </p>
                     </div>
                     <div style="display: flex; gap: 0.5rem;">
-                        <button class="btn btn-secondary" onclick="alert('Esta função visualizará os detalhes do evento emitido.')" title="Detalhes do Evento">
+                        <button class="btn btn-secondary" onclick="window.Pages.ConsultaEvento.abrirModal('${e.codigo}')" title="Ver Respostas">
                             <i class="fas fa-eye"></i> Detalhes
+                        </button>
+                        ${botoesDownload}
+                        <button class="btn btn-danger" onclick="window.Pages.ConsultaEvento.excluir('${e.codigo}')" title="Excluir">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
@@ -87,6 +109,85 @@ window.Pages.ConsultaEvento = function() {
         
         // Renderiza inicial
         renderList();
+        
+        // Modal logic
+        window.Pages.ConsultaEvento.abrirModal = function(codigo) {
+            const eventos = window.Store.getEventos();
+            const e = eventos.find(ev => ev.codigo === codigo);
+            if(!e) return;
+            
+            const cliente = window.Store.getCliente(e.cliente_id) || {};
+            const respostas = e.respostas_pequeno || e.respostas_medio || e.respostas_grande || {};
+            
+            let respostasHtml = '';
+            for (const [key, value] of Object.entries(respostas)) {
+                if (key !== 'subStep' && value !== '') {
+                    let displayVal = value;
+                    if(value === 'sim') displayVal = '<span style="color: var(--success); font-weight: bold;">Sim</span>';
+                    if(value === 'nao') displayVal = '<span style="color: var(--accent-red); font-weight: bold;">Não</span>';
+                    if(value === 'na') displayVal = '<span style="color: var(--text-muted);">Não se aplica</span>';
+                    if(value === 'manual_auto') displayVal = 'Manual ou automatizado';
+                    if(value === 'automatizado') displayVal = 'Automatizado (>1000 pessoas)';
+                    
+                    const questionLabel = window.PERGUNTAS_MAP && window.PERGUNTAS_MAP[key] ? window.PERGUNTAS_MAP[key] : key.replace(/_/g, ' ');
+                    
+                    respostasHtml += \`
+                        <div style="padding: 0.75rem; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; gap: 1rem; align-items: center;">
+                            <span style="font-size: 0.9rem; color: var(--text-muted); flex: 1;">\${questionLabel}</span>
+                            <span style="font-weight: 600; font-size: 0.95rem; text-align: right; min-width: 120px;">\${displayVal}</span>
+                        </div>
+                    \`;
+                }
+            }
+            
+            const modalHtml = \`
+                <div id="eventoModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem;">
+                    <div class="card fade-in" style="width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; background: var(--surface);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1rem;">
+                            <h3 style="margin: 0; color: var(--primary);"><i class="fas fa-clipboard-list"></i> Detalhes do Evento (\${e.codigo})</h3>
+                            <button onclick="document.getElementById('eventoModal').remove()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted);">&times;</button>
+                        </div>
+                        
+                        <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Informações Básicas</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div><strong>Nome:</strong> \${e.nome_evento}</div>
+                            <div><strong>Porte:</strong> \${e.porteFinal}</div>
+                            <div><strong>Data:</strong> \${e.data_inicio} até \${e.data_termino}</div>
+                            <div><strong>Público:</strong> \${e.publico} pessoas</div>
+                            <div><strong>Responsável:</strong> \${cliente.razao_social}</div>
+                            <div><strong>Endereço:</strong> \${e.logradouro_evento}, \${e.numero_evento}</div>
+                        </div>
+                        
+                        <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Quadro de Áreas</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <div><strong>Total:</strong> \${e.area_total} m²</div>
+                            <div><strong>Permanente:</strong> \${e.area_permanente} m²</div>
+                            <div><strong>Provisória:</strong> \${e.area_provisoria} m²</div>
+                        </div>
+                        
+                        <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Respostas do Formulário</h4>
+                        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                            \${respostasHtml}
+                        </div>
+                        
+                        <div style="text-align: center; margin-top: 2rem;">
+                            <button class="btn btn-secondary" onclick="document.getElementById('eventoModal').remove()">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            \`;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        };
+        
+        window.Pages.ConsultaEvento.excluir = function(codigo) {
+            if(confirm('Tem certeza que deseja excluir o histórico deste evento? O laudo não poderá mais ser baixado.')) {
+                let eventos = window.Store.getEventos();
+                eventos = eventos.filter(e => e.codigo !== codigo);
+                localStorage.setItem('scfire_eventos', JSON.stringify(eventos));
+                renderList();
+            }
+        };
         
     }, 0);
     
