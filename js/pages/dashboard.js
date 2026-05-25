@@ -58,9 +58,15 @@ window.Pages.Dashboard = function() {
             </a>
             
             <a href="#/consultar-evento" class="action-card red">
-                <i class="fas fa-list-alt action-icon"></i>
-                <h3 class="action-title">Consultar Eventos</h3>
-                <p class="action-desc">Busque laudos emitidos por código, protocolo ou nome.</p>
+                <i class="fas fa-file-pdf action-icon"></i>
+                <h3 class="action-title">Consultar Laudos</h3>
+                <p class="action-desc">Veja os últimos eventos cadastrados, gere os PDFs ou exclua registros.</p>
+            </a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+            <a href="https://docs.google.com/spreadsheets/d/1rpCY2juNS2Sl2k-I1p2Gcyqr-zYQvsPY0xr9jKS-9Ig/edit?gid=0#gid=0" target="_blank" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; opacity: 0.7; transition: opacity 0.2s;">
+                <i class="fas fa-table"></i> Acessar Planilha Base (Google Sheets)
             </a>
         </div>
     `;
