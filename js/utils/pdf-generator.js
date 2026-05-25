@@ -153,6 +153,13 @@ window.PdfGenerator = (function() {
                 bodyData.push([ questionText, { content: status, styles: { halign: 'center', fontStyle: 'bold' } } ]);
             }
         });
+        if (respostas.OBS) {
+            bodyData.push([{ 
+                content: `Observações: ${respostas.OBS}`, 
+                colSpan: 2, 
+                styles: { halign: 'justify', fontStyle: 'normal', fillColor: 255 } 
+            }]);
+        }
         
         doc.autoTable({
             startY: finalY + 3,
@@ -180,7 +187,8 @@ window.PdfGenerator = (function() {
         
         let locaisArray = [];
         try {
-            locaisArray = JSON.parse(state.locais || "[]");
+            const locaisStr = (state.respostas_grande && state.respostas_grande.locais) ? state.respostas_grande.locais : "[]";
+            locaisArray = JSON.parse(locaisStr);
         } catch(e) {}
         
         if (locaisArray.length === 0) {
@@ -325,13 +333,6 @@ window.PdfGenerator = (function() {
                 
                 currentY = drawCaracteristicas(doc, currentY, state, state.respostas_medio || {});
                 
-                if (state.respostas_medio && state.respostas_medio.OBS) {
-                    const obsText = `Observações: ${state.respostas_medio.OBS}`;
-                    const lines = doc.splitTextToSize(obsText, pageWidth - (margin * 2));
-                    doc.text(lines, margin, currentY);
-                    currentY += (lines.length * 5) + 5;
-                }
-                
                 drawAssinaturas(doc, currentY, state, 'medio');
                 
             } else if (porte === 'grande') {
@@ -345,13 +346,6 @@ window.PdfGenerator = (function() {
                     
                     // Desenha a Tabela de Saídas de Emergência como item 3
                     currentY = drawTabelaSaidas(doc, currentY, state, 3);
-                    
-                    if (state.respostas_grande && state.respostas_grande.OBS) {
-                        const obsText = `Observações: ${state.respostas_grande.OBS}`;
-                        const lines = doc.splitTextToSize(obsText, pageWidth - (margin * 2));
-                        doc.text(lines, margin, currentY);
-                        currentY += (lines.length * 5) + 5;
-                    }
                     
                     drawAssinaturas(doc, currentY, state, 'grande');
                     const fileNameD = `Laudo_${porte}_${state.nome_evento.replace(/ /g, '_')}_AnexoD.pdf`;
@@ -439,6 +433,14 @@ window.PdfGenerator = (function() {
                     }
                 });
                 
+                if (respostasE.OBS) {
+                    bodyDataE.push([{ 
+                        content: `Observações: ${respostasE.OBS}`, 
+                        colSpan: 2, 
+                        styles: { halign: 'justify', fontStyle: 'normal', fillColor: 255 } 
+                    }]);
+                }
+                
                 docE.autoTable({
                     startY: currentYE + 3,
                     theme: 'grid',
@@ -449,14 +451,6 @@ window.PdfGenerator = (function() {
                 });
                 
                 currentYE = docE.lastAutoTable.finalY + 10;
-                
-                // Observações
-                if (state.respostas_grande && state.respostas_grande.OBS) {
-                    const obsText = `Observações: ${state.respostas_grande.OBS}`;
-                    const lines = docE.splitTextToSize(obsText, pageWidth - (margin * 2));
-                    docE.text(lines, margin, currentYE);
-                    currentYE += (lines.length * 5) + 5;
-                }
                 
                 drawAssinaturas(docE, currentYE, state, 'grande');
                 const fileNameE = `Laudo_${porte}_${state.nome_evento.replace(/ /g, '_')}_AnexoE.pdf`;
