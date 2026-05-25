@@ -253,7 +253,12 @@ window.PdfGenerator = (function() {
             doc.text("Local e data", margin + 18, startY + 60);
             
             doc.line(pageWidth - margin - 70, startY + 55, pageWidth - margin, startY + 55);
-            doc.text(`Assinatura do Responsável (${c.razao_social || ''})`, pageWidth - margin - 35, startY + 60, { align: 'center' });
+            doc.text("Assinatura do Responsável", pageWidth - margin - 35, startY + 60, { align: 'center' });
+            
+            const nomeResponsavel = c.razao_social || '';
+            if (nomeResponsavel) {
+                doc.text(`(${nomeResponsavel})`, pageWidth - margin - 35, startY + 64, { align: 'center', maxWidth: 65 });
+            }
             
         } else {
             doc.text('3. RESPONSÁVEIS PELO EVENTO', margin, startY);
