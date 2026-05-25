@@ -1,15 +1,54 @@
 /**
- * Gerenciamento de Estado e Persistência (Local Storage / Mock API)
+ * Gerenciamento de Estado e Persistência (Google Sheets API via Apps Script)
  */
 
 const Store = {
-    // Inicializa a store
-    init() {
+    // URL gerada pelo Google Apps Script
+    GAS_URL: 'https://script.google.com/macros/s/AKfycbw7jFGAVfLmZ86onPfOWUblQ7Viyedcvayc3RMOdA5B5E_bIVpEE18UKCSEhMusNf2D/exec',
+    
+    // Inicializa a store baixando os dados da nuvem
+    async init() {
         if (!localStorage.getItem('scfire_clientes')) {
             localStorage.setItem('scfire_clientes', JSON.stringify([]));
         }
         if (!localStorage.getItem('scfire_eventos')) {
             localStorage.setItem('scfire_eventos', JSON.stringify([]));
+        }
+        
+        try {
+            await this.syncDown();
+        } catch(err) {
+            console.error('Erro ao baixar dados da nuvem:', err);
+            // Continua operando offline se falhar
+        }
+    },
+    
+    // Baixa todos os dados da planilha
+    async syncDown() {
+        try {
+            const res = await fetch(this.GAS_URL);
+            const data = await res.json();
+            
+            if (data.status === 'success') {
+                localStorage.setItem('scfire_clientes', JSON.stringify(data.data.clientes || []));
+                localStorage.setItem('scfire_eventos', JSON.stringify(data.data.eventos || []));
+            }
+        } catch(err) {
+            console.error('Fetch error:', err);
+        }
+    },
+    
+    // Envia dados para a planilha
+    async syncUp(action, itemData) {
+        try {
+            fetch(this.GAS_URL, {
+                method: 'POST',
+                // Usa text/plain para evitar problemas de CORS em Apps Script
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: action, data: itemData })
+            });
+        } catch(err) {
+            console.error('Erro ao enviar dados para a nuvem', err);
         }
     },
 
@@ -35,6 +74,7 @@ const Store = {
             const index = clientes.findIndex(c => c.id === cliente.id);
             if (index !== -1) {
                 clientes[index] = { ...clientes[index], ...cliente, updated_at: new Date().toISOString() };
+                cliente = clientes[index];
             } else {
                 clientes.push(cliente);
             }
@@ -45,7 +85,12 @@ const Store = {
             clientes.push(cliente);
         }
         
+        // Salva local para agilidade da interface
         localStorage.setItem('scfire_clientes', JSON.stringify(clientes));
+        
+        // Envia para a Nuvem de forma invisivel (sem bloquear)
+        this.syncUp('saveCliente', cliente);
+        
         return cliente;
     },
 
@@ -66,6 +111,7 @@ const Store = {
             const index = eventos.findIndex(e => e.id === evento.id);
             if (index !== -1) {
                 eventos[index] = { ...eventos[index], ...evento, updated_at: new Date().toISOString() };
+                evento = eventos[index];
             } else {
                 eventos.push(evento);
             }
@@ -82,7 +128,12 @@ const Store = {
             eventos.push(evento);
         }
         
+        // Salva local para agilidade da interface
         localStorage.setItem('scfire_eventos', JSON.stringify(eventos));
+        
+        // Envia para a Nuvem de forma invisivel
+        this.syncUp('saveEvento', evento);
+        
         return evento;
     },
     
