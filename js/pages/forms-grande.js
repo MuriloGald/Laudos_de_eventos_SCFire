@@ -329,17 +329,19 @@ window.FormsGrande = function(state, avancarCallback) {
                         if (e.target.value === 'sim') {
                             div.classList.remove('hidden');
                             reqInputNames.forEach(n => {
-                                const inp = form.querySelector(`input[name="${n}"]`);
-                                if(inp) inp.setAttribute('required', 'true');
+                                const inps = form.querySelectorAll(`input[name="${n}"]`);
+                                inps.forEach(inp => inp.setAttribute('required', 'true'));
                             });
                         } else {
                             div.classList.add('hidden');
                             reqInputNames.forEach(n => {
-                                const inp = form.querySelector(`input[name="${n}"]`);
-                                if(inp) {
+                                const inps = form.querySelectorAll(`input[name="${n}"]`);
+                                inps.forEach(inp => {
                                     inp.removeAttribute('required');
-                                    inp.value = '';
-                                }
+                                    // Limpar se não for radio (ou desmarcar se for radio)
+                                    if(inp.type === 'radio') inp.checked = false;
+                                    else inp.value = '';
+                                });
                             });
                         }
                     });
@@ -417,7 +419,7 @@ window.FormsGrande = function(state, avancarCallback) {
         }
 
         if(subStep === 9) {
-            setupRadioToggle('TEM_PIRO', 'div-piro', []);
+            setupRadioToggle('TEM_PIRO', 'div-piro', ['LAPIRO1', 'LAPIRO2', 'LAPIRO3', 'LAPIRO4', 'LAPIRO5']);
         }
         
         document.getElementById('btn-back-sub').addEventListener('click', () => {

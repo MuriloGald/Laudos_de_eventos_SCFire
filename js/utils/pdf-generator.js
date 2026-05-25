@@ -237,8 +237,11 @@ window.PdfGenerator = (function() {
             doc.text('3. TERMO DE RESPONSABILIDADE', margin, startY);
             doc.setFont('helvetica', 'normal');
             doc.setFontSize(9);
-            const texto = "Declaro junto ao Corpo de Bombeiros Militar de Santa Catarina (CBMSC) que estou ciente e assumo total responsabilidade pelas informações do evento temporário acima descritas, as quais enquadram o evento como sendo de Pequeno Porte, conforme a Instrução Normativa (IN) 24 do CBMSC, e que possuo o dever legal de garantir as condições de segurança do local, adotando, operacionalizando e disponibilizando os Sistemas e Medidas de Segurança Contra Incêndio (SMSCI) para o evento de acordo com as Normas de Segurança Contra Incêndio do CBMSC, em especial o artigo 18 da IN 24.\n\nDeclaro ainda estar ciente que o descumprimento das NSCI ou à inveracidade das informações prestadas ensejam infração administrativa, conforme Lei Estadual 13.157/2013, podendo ainda responder civil e criminalmente conforme a legislação vigente.";
-            doc.text(texto, margin, startY + 5, { maxWidth: pageWidth - (margin*2), align: 'justify' });
+            const texto1 = "Declaro junto ao Corpo de Bombeiros Militar de Santa Catarina (CBMSC) que estou ciente e assumo total responsabilidade pelas informações do evento temporário acima descritas, as quais enquadram o evento como sendo de Pequeno Porte, conforme a Instrução Normativa (IN) 24 do CBMSC, e que possuo o dever legal de garantir as condições de segurança do local, adotando, operacionalizando e disponibilizando os Sistemas e Medidas de Segurança Contra Incêndio (SMSCI) para o evento de acordo com as Normas de Segurança Contra Incêndio do CBMSC, em especial o artigo 18 da IN 24.";
+            const texto2 = "Declaro ainda estar ciente que o descumprimento das NSCI ou à inveracidade das informações prestadas ensejam infração administrativa, conforme Lei Estadual 13.157/2013, podendo ainda responder civil e criminalmente conforme a legislação vigente.";
+            
+            doc.text(texto1, margin, startY + 5, { maxWidth: pageWidth - (margin*2) });
+            doc.text(texto2, margin, startY + 25, { maxWidth: pageWidth - (margin*2) });
             
             const dataEmissao = new Date(state.data_emissao || Date.now());
             const dataFormatada = dataEmissao.toLocaleDateString('pt-BR');
