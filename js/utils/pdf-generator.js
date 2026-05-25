@@ -42,7 +42,7 @@ window.PdfGenerator = (function() {
         ];
         
         if (state.porteFinal !== 'pequeno') {
-            bodyData.push([`Responsável Técnico: ${rt.nome}`, `CPF: ${rt.cpf} | Fone: ${rt.telefone}`]);
+            bodyData.push([`Responsável Técnico: ${rt.nome}`, `CPF: ${rt.cpf}\nFone: ${rt.telefone}`]);
         }
         
         bodyData.push(
@@ -58,17 +58,23 @@ window.PdfGenerator = (function() {
             head: [],
             body: bodyData,
             styles: { fontSize: 9, cellPadding: 2, textColor: 0, lineColor: 0, lineWidth: 0.2 },
-            columnStyles: { 0: { cellWidth: '60%' }, 1: { cellWidth: '40%' } }
+            columnStyles: { 0: { cellWidth: '50%' }, 1: { cellWidth: '50%' } }
         });
         
         return doc.lastAutoTable.finalY + 10;
     };
     
     // Helper para desenhar a tabela de Características
-    const drawCaracteristicas = (doc, startY, state, respostas) => {
+    const drawCaracteristicas = (doc, startY, state, respostas, numSection = 2) => {
+        let finalY = startY;
+        if (startY > 250) {
+            doc.addPage();
+            finalY = margin + 10;
+        }
+        
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
-        doc.text('2. CARACTERÍSTICAS DO EVENTO / SEGURANÇA CONTRA INCÊNDIO', margin, startY);
+        doc.text(`${numSection}. CARACTERÍSTICAS DO EVENTO / SEGURANÇA CONTRA INCÊNDIO`, margin, finalY);
         
         const bodyData = [];
         let mapOrdem = [];
@@ -149,12 +155,52 @@ window.PdfGenerator = (function() {
         });
         
         doc.autoTable({
-            startY: startY + 3,
+            startY: finalY + 3,
             theme: 'grid',
             head: [],
             body: bodyData,
             styles: { fontSize: 9, cellPadding: 2, textColor: 0, lineColor: 0, lineWidth: 0.2 },
             columnStyles: { 0: { cellWidth: '85%' }, 1: { cellWidth: '15%' } }
+        });
+        
+        return doc.lastAutoTable.finalY + 10;
+    };
+    
+    // Helper para desenhar a tabela de Saídas (Anexo D)
+    const drawTabelaSaidas = (doc, startY, state) => {
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('3. TABELA DE DIMENSIONAMENTO DAS SAÍDAS DE EMERGÊNCIA', margin, startY);
+        
+        let locaisArray = [];
+        try {
+            locaisArray = JSON.parse(state.locais || "[]");
+        } catch(e) {}
+        
+        if (locaisArray.length === 0) {
+            locaisArray.push({nome: 'Não informado', boate: '-', carac: '-', publico: '-', area: '-', distancia: '-', qtd: '-', largura: '-'});
+        }
+        
+        const head = [['Nome do Local', 'Boate/Show Musical', 'Características', 'Público', 'Área (m²)', 'Distância (m)', 'Qtd. Saídas', 'Largura (m)']];
+        const body = locaisArray.map(l => [l.nome, l.boate, l.carac, l.publico, l.area, l.distancia, l.qtd, l.largura]);
+        
+        doc.autoTable({
+            startY: startY + 3,
+            theme: 'grid',
+            head: head,
+            body: body,
+            headStyles: { fillColor: [220, 220, 220], textColor: 0, fontStyle: 'bold', halign: 'center', fontSize: 7, cellPadding: 1 },
+            styles: { fontSize: 8, cellPadding: 1, textColor: 0, lineColor: 0, lineWidth: 0.2, halign: 'center', valign: 'middle' },
+            columnStyles: { 
+                0: { cellWidth: 30 }, 
+                1: { cellWidth: 20 }, 
+                2: { cellWidth: 40 }, 
+                3: { cellWidth: 15 }, 
+                4: { cellWidth: 20 }, 
+                5: { cellWidth: 20 }, 
+                6: { cellWidth: 17 }, 
+                7: { cellWidth: 20 }
+            }
         });
         
         return doc.lastAutoTable.finalY + 10;
@@ -238,7 +284,7 @@ window.PdfGenerator = (function() {
     };
     
     return {
-        gerar: function(state) {
+        gerar: function(state, tipoPdf = 'ambos') {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
             
@@ -258,7 +304,6 @@ window.PdfGenerator = (function() {
                 
                 currentY = drawCaracteristicas(doc, currentY, state, state.respostas_medio || {});
                 
-                // Observações
                 if (state.respostas_medio && state.respostas_medio.OBS) {
                     const obsText = `Observações: ${state.respostas_medio.OBS}`;
                     const lines = doc.splitTextToSize(obsText, pageWidth - (margin * 2));
@@ -270,33 +315,43 @@ window.PdfGenerator = (function() {
                 
             } else if (porte === 'grande') {
                 // ANEXO D
-                currentY = drawHeader(doc, 'Anexo D - Memorial Técnico de Segurança Contra Incêndio', 'EVENTO DE GRANDE PORTE');
-                currentY = drawIdentificacao(doc, currentY, state);
-                
-                currentY = drawCaracteristicas(doc, currentY, state, state.respostas_grande || {});
-                
-                // Observações
-                if (state.respostas_grande && state.respostas_grande.OBS) {
-                    const obsText = `Observações: ${state.respostas_grande.OBS}`;
-                    const lines = doc.splitTextToSize(obsText, pageWidth - (margin * 2));
-                    doc.text(lines, margin, currentY);
-                    currentY += (lines.length * 5) + 5;
+                if (tipoPdf === 'ambos' || tipoPdf === 'anexod') {
+                    currentY = drawHeader(doc, 'Anexo D - Memorial Técnico de Segurança Contra Incêndio', 'EVENTO DE GRANDE PORTE');
+                    currentY = drawIdentificacao(doc, currentY, state);
+                    
+                    // Desenha a Tabela de Saídas de Emergência como item 3
+                    currentY = drawTabelaSaidas(doc, currentY, state);
+                    
+                    // Desenha as características como item 4 (em vez de 2)
+                    currentY = drawCaracteristicas(doc, currentY, state, state.respostas_grande || {}, 4);
+                    
+                    if (state.respostas_grande && state.respostas_grande.OBS) {
+                        const obsText = `Observações: ${state.respostas_grande.OBS}`;
+                        const lines = doc.splitTextToSize(obsText, pageWidth - (margin * 2));
+                        doc.text(lines, margin, currentY);
+                        currentY += (lines.length * 5) + 5;
+                    }
+                    
+                    drawAssinaturas(doc, currentY, state, 'grande');
+                    const fileNameD = `Laudo_${porte}_${state.nome_evento.replace(/ /g, '_')}_AnexoD.pdf`;
+                    if (tipoPdf === 'ambos') doc.save(fileNameD);
+                    else {
+                        doc.save(fileNameD);
+                        return fileNameD;
+                    }
                 }
                 
-                drawAssinaturas(doc, currentY, state, 'grande');
-                const fileNameD = `Laudo_${porte}_${state.nome_evento.replace(/ /g, '_')}_AnexoD.pdf`;
-                doc.save(fileNameD);
-                
                 // ANEXO E (Laudo de Comissionamento)
-                const docE = new jsPDF();
-                let currentYE = margin;
-                currentYE = drawHeader(docE, 'Anexo E - Laudo de Comissionamento', 'EVENTO DE GRANDE PORTE');
-                currentYE = drawIdentificacao(docE, currentYE, state);
-                
-                // Desenhar tabela de características específicas do Anexo E
-                docE.setFontSize(10);
-                docE.setFont('helvetica', 'bold');
-                docE.text('2. SEGURANÇA CONTRA INCÊNDIO E PÂNICO DO EVENTO', margin, currentYE);
+                if (tipoPdf === 'ambos' || tipoPdf === 'anexoe') {
+                    const docE = (tipoPdf === 'ambos') ? new jsPDF() : doc;
+                    let currentYE = margin;
+                    currentYE = drawHeader(docE, 'Anexo E - Laudo de Comissionamento', 'EVENTO DE GRANDE PORTE');
+                    currentYE = drawIdentificacao(docE, currentYE, state);
+                    
+                    docE.setFontSize(10);
+                    docE.setFont('helvetica', 'bold');
+                    docE.text('2. SEGURANÇA CONTRA INCÊNDIO E PÂNICO DO EVENTO', margin, currentYE);
+                    currentYE += 5;
                 
                 const respostasE = state.respostas_grande || {};
                 const mapAnexoE = [

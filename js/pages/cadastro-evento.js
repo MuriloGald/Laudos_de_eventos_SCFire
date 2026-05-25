@@ -514,11 +514,13 @@ window.Pages.CadastroEvento = function() {
                     const filename = window.PdfGenerator.gerar(state);
                     
                     // Salva o evento no histórico (Store)
-                    const codigo = 'EVT-' + new Date().getFullYear() + '-' + Math.floor(Math.random()*10000).toString().padStart(4, '0');
+                    // Se state.codigo existir, é edição
+                    const codigo = state.codigo || ('EVT-' + new Date().getFullYear() + '-' + Math.floor(Math.random()*10000).toString().padStart(4, '0'));
+                    
                     const evento = {
                         ...state,
                         codigo: codigo,
-                        data_emissao: new Date().toISOString(),
+                        data_emissao: state.data_emissao || new Date().toISOString(),
                         arquivo: filename
                     };
                     

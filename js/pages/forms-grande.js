@@ -35,7 +35,7 @@ window.FormsGrande = function(state, avancarCallback) {
         const form = document.createElement('form');
         form.id = 'form-grande-porte';
         
-        const totalSteps = 8;
+        const totalSteps = 9;
         let progressHtml = '<div style="display: flex; gap: 4px; margin-bottom: 2rem;">';
         for(let i=1; i<=totalSteps; i++) {
             progressHtml += `<div style="flex: 1; height: 6px; border-radius: 3px; background-color: ${subStep >= i ? 'var(--primary)' : 'var(--border-color)'}"></div>`;
@@ -249,7 +249,37 @@ window.FormsGrande = function(state, avancarCallback) {
         }
         else if (subStep === 8) {
             contentHtml = `
-                <h4 class="mb-3" style="color: var(--primary);">8/8 - Laudo de Comissionamento (Anexo E)</h4>
+                <h4 class="mb-3" style="color: var(--primary);">8/9 - Tabela de Dimensionamento das Saídas de Emergência</h4>
+                <p class="mb-4" style="color: var(--text-muted); font-size: 0.9rem;">Preencha a tabela abaixo com os locais do evento conforme exigido no Item 3 do Memorial Técnico (Anexo D).</p>
+                
+                <div style="overflow-x: auto; margin-bottom: 1rem; width: 100%;">
+                    <table class="table" id="tabela-saidas" style="min-width: 900px; font-size: 0.85rem;">
+                        <thead style="background: var(--bg-color);">
+                            <tr>
+                                <th>Nome do Local</th>
+                                <th>Boate/Show Musical?</th>
+                                <th>Características do Local</th>
+                                <th style="width: 80px;">Público</th>
+                                <th style="width: 80px;">Área (m²)</th>
+                                <th style="width: 80px;">Dist. Máx (m)</th>
+                                <th style="width: 70px;">Qtd. Saídas</th>
+                                <th style="width: 90px;">Largura Total (m)</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabela-saidas-body">
+                            <!-- rows -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <button type="button" class="btn btn-secondary mb-4" id="btn-add-local"><i class="fas fa-plus"></i> Adicionar Local</button>
+                <input type="hidden" name="locais" id="locais-json" value='${formState['locais'] || "[]"}'>
+            `;
+        }
+        else if (subStep === 9) {
+            contentHtml = `
+                <h4 class="mb-3" style="color: var(--primary);">9/9 - Laudo de Comissionamento (Anexo E)</h4>
                 <p class="mb-4" style="color: var(--text-muted); font-size: 0.9rem;">Estas perguntas pertencem ao Anexo E e atestam que os itens já foram instalados e conferidos no local do evento.</p>
                 
                 ${renderQuestion('LADOC', 'O Memorial Técnico de Segurança Contra Incêndio, DRT e croqui apresentados estão de acordo com o evento temporário?')}
@@ -323,7 +353,70 @@ window.FormsGrande = function(state, avancarCallback) {
             setupRadioToggle('SALGP03', 'div-pla-qtd', ['PLACA']);
             setupRadioToggle('DEMAISGP04', 'div-brig-qtd', ['BRIG']);
         }
-        if(subStep === 8) {
+        
+        // Lógica para a Tabela de Locais
+        if (subStep === 8) {
+            const body = document.getElementById('tabela-saidas-body');
+            const btnAdd = document.getElementById('btn-add-local');
+            const inputJson = document.getElementById('locais-json');
+            
+            let locaisArray = JSON.parse(inputJson.value || "[]");
+            
+            const renderRows = () => {
+                body.innerHTML = '';
+                locaisArray.forEach((local, index) => {
+                    const tr = document.createElement('tr');
+                    tr.dataset.index = index;
+                    tr.innerHTML = `
+                        <td><input type="text" class="form-control" data-field="nome" value="${local.nome || ''}"></td>
+                        <td>
+                            <select class="form-control" data-field="boate">
+                                <option value="Não" ${local.boate === 'Não' ? 'selected' : ''}>Não</option>
+                                <option value="Sim" ${local.boate === 'Sim' ? 'selected' : ''}>Sim</option>
+                            </select>
+                        </td>
+                        <td><input type="text" class="form-control" data-field="carac" value="${local.carac || ''}" placeholder="Ex: Estrutura coberta"></td>
+                        <td><input type="number" class="form-control" data-field="publico" value="${local.publico || ''}"></td>
+                        <td><input type="text" class="form-control" data-field="area" value="${local.area || ''}"></td>
+                        <td><input type="number" class="form-control" data-field="distancia" value="${local.distancia || ''}"></td>
+                        <td><input type="number" class="form-control" data-field="qtd" value="${local.qtd || ''}"></td>
+                        <td><input type="text" class="form-control" data-field="largura" value="${local.largura || ''}"></td>
+                        <td><button type="button" class="btn btn-danger btn-sm btn-remover" title="Remover"><i class="fas fa-trash"></i></button></td>
+                    `;
+                    body.appendChild(tr);
+                });
+                inputJson.value = JSON.stringify(locaisArray);
+            };
+            
+            body.addEventListener('input', (e) => {
+                const tr = e.target.closest('tr');
+                if(!tr) return;
+                const idx = parseInt(tr.dataset.index);
+                const field = e.target.dataset.field;
+                if(field !== undefined) {
+                    locaisArray[idx][field] = e.target.value;
+                    inputJson.value = JSON.stringify(locaisArray);
+                }
+            });
+            
+            body.addEventListener('click', (e) => {
+                const btn = e.target.closest('.btn-remover');
+                if(!btn) return;
+                const tr = btn.closest('tr');
+                const idx = parseInt(tr.dataset.index);
+                locaisArray.splice(idx, 1);
+                renderRows();
+            });
+            
+            btnAdd.addEventListener('click', () => {
+                locaisArray.push({nome: '', boate: 'Não', carac: '', publico: '', area: '', distancia: '', qtd: '', largura: ''});
+                renderRows();
+            });
+            
+            renderRows();
+        }
+
+        if(subStep === 9) {
             setupRadioToggle('TEM_PIRO', 'div-piro', []);
         }
         

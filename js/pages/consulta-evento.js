@@ -63,16 +63,16 @@ window.Pages.ConsultaEvento = function() {
                 let botoesDownload = '';
                 if (Array.isArray(e.arquivo)) {
                     botoesDownload = `
-                        <button class="btn btn-primary" onclick="alert('Funcionalidade de download será acoplada ao backend/armazenamento posteriormente. Arquivos: ${e.arquivo.join(', ')}')" title="Baixar Anexo D">
+                        <button class="btn btn-primary" onclick="window.Pages.ConsultaEvento.baixarPdf('${e.codigo}', 'anexod')" title="Baixar Anexo D">
                             <i class="fas fa-file-pdf"></i> Anexo D
                         </button>
-                        <button class="btn btn-primary" onclick="alert('Funcionalidade de download será acoplada ao backend/armazenamento posteriormente. Arquivos: ${e.arquivo.join(', ')}')" title="Baixar Anexo E">
+                        <button class="btn btn-primary" onclick="window.Pages.ConsultaEvento.baixarPdf('${e.codigo}', 'anexoe')" title="Baixar Anexo E">
                             <i class="fas fa-file-pdf"></i> Anexo E
                         </button>
                     `;
                 } else {
                     botoesDownload = `
-                        <button class="btn btn-primary" onclick="alert('Funcionalidade de download será acoplada ao backend/armazenamento posteriormente. Arquivo: ${e.arquivo}')" title="Baixar Laudo">
+                        <button class="btn btn-primary" onclick="window.Pages.ConsultaEvento.baixarPdf('${e.codigo}', 'ambos')" title="Baixar Laudo">
                             <i class="fas fa-download"></i> Baixar
                         </button>
                     `;
@@ -93,6 +93,9 @@ window.Pages.ConsultaEvento = function() {
                     <div style="display: flex; gap: 0.5rem;">
                         <button class="btn btn-secondary" onclick="window.Pages.ConsultaEvento.abrirModal('${e.codigo}')" title="Ver Respostas">
                             <i class="fas fa-eye"></i> Detalhes
+                        </button>
+                        <button class="btn btn-warning" onclick="window.Pages.ConsultaEvento.editar('${e.codigo}')" title="Editar e Gerar Novamente">
+                            <i class="fas fa-edit"></i> Editar
                         </button>
                         ${botoesDownload}
                         <button class="btn btn-danger" onclick="window.Pages.ConsultaEvento.excluir('${e.codigo}')" title="Excluir">
@@ -155,23 +158,44 @@ window.Pages.ConsultaEvento = function() {
                             <div><strong>Data:</strong> ${e.data_inicio} até ${e.data_termino}</div>
                             <div><strong>Público:</strong> ${e.publico} pessoas</div>
                             <div><strong>Responsável:</strong> ${cliente.razao_social}</div>
-                            <div><strong>Endereço:</strong> ${e.logradouro_evento}, ${e.numero_evento}</div>
+                            <div><strong>Emissão:</strong> ${new Date(e.data_emissao).toLocaleString('pt-BR')}</div>
                         </div>
                         
-                        <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Quadro de Áreas</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <div><strong>Total:</strong> ${e.area_total} m²</div>
-                            <div><strong>Permanente:</strong> ${e.area_permanente} m²</div>
-                            <div><strong>Provisória:</strong> ${e.area_provisoria} m²</div>
-                        </div>
-                        
-                        <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Respostas do Formulário</h4>
-                        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                        <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Respostas do Questionário</h4>
+                        <div style="background: #f9fafb; border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 1.5rem;">
                             ${respostasHtml}
                         </div>
                         
-                        <div style="text-align: center; margin-top: 2rem;">
-                            <button class="btn btn-secondary" onclick="document.getElementById('eventoModal').remove()">Fechar</button>
+                        ${e.locais ? `
+                        <h4 style="color: var(--primary-dark); margin-bottom: 0.5rem;">Tabela de Locais Cadastrados</h4>
+                        <div style="overflow-x: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); margin-bottom: 1.5rem;">
+                            <table class="table" style="font-size: 0.85rem; margin-bottom: 0; min-width: 600px;">
+                                <thead style="background: var(--bg-color);">
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Boate</th>
+                                        <th>Público</th>
+                                        <th>Qtd. Saídas</th>
+                                        <th>Largura Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${JSON.parse(e.locais).map(l => `
+                                        <tr>
+                                            <td>${l.nome || '-'}</td>
+                                            <td>${l.boate || '-'}</td>
+                                            <td>${l.publico || '-'}</td>
+                                            <td>${l.qtd || '-'}</td>
+                                            <td>${l.largura || '-'}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        ` : ''}
+                        
+                        <div style="text-align: center;">
+                            <button class="btn btn-primary" onclick="document.getElementById('eventoModal').remove()">Fechar</button>
                         </div>
                     </div>
                 </div>
@@ -186,6 +210,29 @@ window.Pages.ConsultaEvento = function() {
                 eventos = eventos.filter(e => e.codigo !== codigo);
                 localStorage.setItem('scfire_eventos', JSON.stringify(eventos));
                 renderList();
+            }
+        };
+        
+        window.Pages.ConsultaEvento.baixarPdf = function(codigo, tipo) {
+            const eventos = window.Store.getEventos();
+            const e = eventos.find(ev => ev.codigo === codigo);
+            if(e) {
+                try {
+                    window.PdfGenerator.gerar(e, tipo);
+                } catch(err) {
+                    console.error("Erro ao gerar PDF:", err);
+                    alert("Ocorreu um erro ao gerar o PDF. Verifique se os dados estão corretos.");
+                }
+            }
+        };
+        
+        window.Pages.ConsultaEvento.editar = function(codigo) {
+            const eventos = window.Store.getEventos();
+            const e = eventos.find(ev => ev.codigo === codigo);
+            if(e) {
+                // Guarda o evento inteiro no rascunho para reabrir o form
+                window.Store.salvarEstadoWizard(e);
+                window.Router.navigate('#/cadastrar-evento');
             }
         };
         
