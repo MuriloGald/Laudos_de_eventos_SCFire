@@ -2,9 +2,17 @@
  * Inicialização da Aplicação
  */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Inicializa o Store (Local Storage)
-    window.Store.init();
+document.addEventListener('DOMContentLoaded', async () => {
+    
+    // Mostra tela de carregamento temporária
+    const appContainer = document.getElementById('app-container');
+    appContainer.innerHTML = '<div style="display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column;"><i class="fas fa-spinner fa-spin" style="font-size:3rem; color:var(--primary); margin-bottom:1rem;"></i><h3>Sincronizando com a Nuvem...</h3></div>';
+    
+    // 1. Inicializa o Store (Google Sheets + Local Storage)
+    await window.Store.init();
+    
+    // Limpa carregamento
+    appContainer.innerHTML = '';
     
     // Evitar que o scroll do mouse altere inputs numéricos acidentalmente
     document.addEventListener('wheel', function(event) {
