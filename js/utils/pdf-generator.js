@@ -458,14 +458,11 @@ window.PdfGenerator = (function() {
                 
                 return [tipoPdf === 'ambos' ? `Laudo_${porte}_${state.nome_evento.replace(/ /g, '_')}_AnexoD.pdf` : null, fileNameE];
             }
-        } else {
+            
             // Salvar para pequeno e medio
             const fileName = `Laudo_${porte}_${state.nome_evento.replace(/ /g, '_')}.pdf`;
             doc.save(fileName);
             
             return fileName;
-        }
-            
-        }
     };
 })();
