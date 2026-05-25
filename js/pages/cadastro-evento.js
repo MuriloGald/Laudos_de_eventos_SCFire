@@ -532,7 +532,7 @@ window.Pages.CadastroEvento = function() {
                     window.Router.navigate('#/consultar-evento');
                 } catch(e) {
                     console.error("Erro ao gerar PDF:", e);
-                    alert("Ocorreu um erro ao gerar o PDF. Verifique o console.");
+                    alert("Ocorreu um erro ao gerar o PDF. Verifique o console.\nDetalhes do erro: " + e.message + "\n\nStack: " + e.stack);
                 }
             });
         }, 0);
