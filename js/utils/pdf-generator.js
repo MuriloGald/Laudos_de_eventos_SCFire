@@ -167,10 +167,16 @@ window.PdfGenerator = (function() {
     };
     
     // Helper para desenhar a tabela de Saídas (Anexo D)
-    const drawTabelaSaidas = (doc, startY, state) => {
+    const drawTabelaSaidas = (doc, startY, state, numSection = 3) => {
+        let finalY = startY;
+        if (startY > 250) {
+            doc.addPage();
+            finalY = margin + 10;
+        }
+
         doc.setFontSize(10);
         doc.setFont('helvetica', 'bold');
-        doc.text('3. TABELA DE DIMENSIONAMENTO DAS SAÍDAS DE EMERGÊNCIA', margin, startY);
+        doc.text(`${numSection}. TABELA DE DIMENSIONAMENTO DAS SAÍDAS DE EMERGÊNCIA`, margin, finalY);
         
         let locaisArray = [];
         try {
@@ -185,7 +191,7 @@ window.PdfGenerator = (function() {
         const body = locaisArray.map(l => [l.nome, l.boate, l.carac, l.publico, l.area, l.distancia, l.qtd, l.largura]);
         
         doc.autoTable({
-            startY: startY + 3,
+            startY: finalY + 3,
             theme: 'grid',
             head: head,
             body: body,
@@ -226,8 +232,17 @@ window.PdfGenerator = (function() {
             const texto = "Declaro junto ao Corpo de Bombeiros Militar de Santa Catarina (CBMSC) que estou ciente e assumo total responsabilidade pelas informações do evento temporário acima descritas, as quais enquadram o evento como sendo de Pequeno Porte, conforme a Instrução Normativa (IN) 24 do CBMSC, e que possuo o dever legal de garantir as condições de segurança do local, adotando, operacionalizando e disponibilizando os Sistemas e Medidas de Segurança Contra Incêndio (SMSCI) para o evento de acordo com as Normas de Segurança Contra Incêndio do CBMSC, em especial o artigo 18 da IN 24.\n\nDeclaro ainda estar ciente que o descumprimento das NSCI ou à inveracidade das informações prestadas ensejam infração administrativa, conforme Lei Estadual 13.157/2013, podendo ainda responder civil e criminalmente conforme a legislação vigente.";
             doc.text(texto, margin, startY + 5, { maxWidth: pageWidth - (margin*2), align: 'justify' });
             
-            doc.line(pageWidth/2 - 40, startY + 60, pageWidth/2 + 40, startY + 60);
-            doc.text(`Assinatura do Responsável (${c.razao_social || ''})`, pageWidth/2, startY + 65, { align: 'center' });
+            const dataEmissao = new Date(state.data_emissao || Date.now());
+            const dataFormatada = dataEmissao.toLocaleDateString('pt-BR');
+            const cidade = window.EMPRESA.cidade || 'Florianópolis';
+            const textoLocalData = `${cidade}, ${dataFormatada}`;
+            
+            doc.text(textoLocalData, margin + 5, startY + 54);
+            doc.text("________________________________", margin, startY + 55);
+            doc.text("Local e data", margin + 18, startY + 60);
+            
+            doc.line(pageWidth - margin - 70, startY + 55, pageWidth - margin, startY + 55);
+            doc.text(`Assinatura do Responsável (${c.razao_social || ''})`, pageWidth - margin - 35, startY + 60, { align: 'center' });
             
         } else {
             doc.text('3. RESPONSÁVEIS PELO EVENTO', margin, startY);
@@ -275,8 +290,14 @@ window.PdfGenerator = (function() {
             const texto = `Declaro junto ao Corpo de Bombeiros Militar de Santa Catarina (CBMSC) que estou ciente e assumo total responsabilidade pelas informações do evento temporário acima descritas, as quais enquadram o evento como sendo de ${tipo === 'medio' ? 'Médio Porte' : 'Grande Porte'}, conforme a Instrução Normativa (IN) 24 do CBMSC.\n\nAtesto que os SMSCI do evento, bem como eventuais estruturas montadas, estão corretamente previstos, dimensionados e serão instalados de acordo com as NSCI, estando em pleno funcionamento durante a realização do evento.\n\nDeclaro ainda estar ciente que o descumprimento das NSCI ou à inveracidade das informações prestadas ensejam infração administrativa, conforme Lei Estadual 13.157/2013, podendo ainda responder civil e criminalmente conforme a legislação vigente.`;
             doc.text(texto, margin, finalY + 5, { maxWidth: pageWidth - (margin*2), align: 'justify' });
             
-            doc.text("__________________________, ____/____/____", margin, finalY + 45);
-            doc.text("Local e data", margin + 25, finalY + 50);
+            const dataEmissao = new Date(state.data_emissao || Date.now());
+            const dataFormatada = dataEmissao.toLocaleDateString('pt-BR');
+            const cidade = window.EMPRESA.cidade || 'Florianópolis';
+            const textoLocalData = `${cidade}, ${dataFormatada}`;
+            
+            doc.text(textoLocalData, margin + 5, finalY + 44);
+            doc.text("________________________________", margin, finalY + 45);
+            doc.text("Local e data", margin + 18, finalY + 50);
             
             doc.text("__________________________________________", pageWidth - margin - 70, finalY + 45);
             doc.text("Assinatura do RT", pageWidth - margin - 50, finalY + 50);
@@ -319,11 +340,11 @@ window.PdfGenerator = (function() {
                     currentY = drawHeader(doc, 'Anexo D - Memorial Técnico de Segurança Contra Incêndio', 'EVENTO DE GRANDE PORTE');
                     currentY = drawIdentificacao(doc, currentY, state);
                     
-                    // Desenha a Tabela de Saídas de Emergência como item 3
-                    currentY = drawTabelaSaidas(doc, currentY, state);
+                    // Desenha as características como item 2
+                    currentY = drawCaracteristicas(doc, currentY, state, state.respostas_grande || {}, 2);
                     
-                    // Desenha as características como item 4 (em vez de 2)
-                    currentY = drawCaracteristicas(doc, currentY, state, state.respostas_grande || {}, 4);
+                    // Desenha a Tabela de Saídas de Emergência como item 3
+                    currentY = drawTabelaSaidas(doc, currentY, state, 3);
                     
                     if (state.respostas_grande && state.respostas_grande.OBS) {
                         const obsText = `Observações: ${state.respostas_grande.OBS}`;
