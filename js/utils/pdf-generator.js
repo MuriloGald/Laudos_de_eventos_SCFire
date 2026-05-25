@@ -395,7 +395,7 @@ window.PdfGenerator = (function() {
                     { type: 'header', label: 'Demais normativas' },
                     { key: 'LADE1' }, { key: 'DEMAISGP03' }, { key: 'DEMAISGP04', embedVal: 'BRIG' }, { key: 'DEMAISGP05' }, { key: 'LADE2' },
                     { type: 'header', label: 'Prevenção em Espetáculos Pirotécnicos' },
-                    { key: 'LAPIRO1' }, { key: 'LAPIRO2' }, { key: 'LAPIRO3' }, { key: 'LAPIRO4' }, { key: 'LAPIRO5' },
+                    { key: 'TEM_PIRO' }, { key: 'LAPIRO1' }, { key: 'LAPIRO2' }, { key: 'LAPIRO3' }, { key: 'LAPIRO4' }, { key: 'LAPIRO5' },
                     { type: 'header', label: 'Equipamentos' },
                     { key: 'EQUIPSGP' }
                 ];
@@ -405,10 +405,12 @@ window.PdfGenerator = (function() {
                     if (item.type === 'header') {
                         bodyDataE.push([{ content: item.label, styles: { halign: 'center', fillColor: [240, 240, 240], fontStyle: 'bold' } }, { content: 'Status', styles: { halign: 'center', fillColor: [240, 240, 240], fontStyle: 'bold' } }]);
                     } else {
-                        // Se não tem piro e as perguntas são de piro, ignora
-                        if (respostasE['TEM_PIRO'] !== 'sim' && item.key.startsWith('LAPIRO')) return;
-                        
                         let answer = respostasE[item.key] || '';
+                        
+                        // Se não tem piro e as perguntas são de piro, mostra NA
+                        if (respostasE['TEM_PIRO'] !== 'sim' && item.key.startsWith('LAPIRO')) {
+                            answer = 'na';
+                        }
                         let status = answer;
                         
                         if(answer === 'sim') status = 'SIM';

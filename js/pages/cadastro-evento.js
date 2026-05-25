@@ -225,15 +225,15 @@ window.Pages.CadastroEvento = function() {
                         </div>
                         <div class="form-group" style="flex: 1;">
                             <label>Área total (m²)</label>
-                            <input type="number" name="area_total" class="form-control" value="${state.area_total || ''}" required>
+                            <input type="text" name="area_total" class="form-control" value="${state.area_total || ''}" placeholder="Ex: 1.000,00" required>
                         </div>
                         <div class="form-group" style="flex: 1;">
                             <label>Instalações permanentes (m²)</label>
-                            <input type="number" name="area_permanente" class="form-control" value="${state.area_permanente || ''}" required>
+                            <input type="text" name="area_permanente" class="form-control" value="${state.area_permanente || ''}" placeholder="Ex: 500,00" required>
                         </div>
                         <div class="form-group" style="flex: 1;">
                             <label>Estruturas provisórias (m²)</label>
-                            <input type="number" name="area_provisoria" class="form-control" value="${state.area_provisoria || ''}" required>
+                            <input type="text" name="area_provisoria" class="form-control" value="${state.area_provisoria || ''}" placeholder="Ex: 500,00" required>
                         </div>
                     </div>
                     

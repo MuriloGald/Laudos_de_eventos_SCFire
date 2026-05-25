@@ -46,6 +46,7 @@ window.PERGUNTAS_MAP = {
     'PROVISORIAPP02': 'Serão utilizadas arquibancadas provisórias?',
     'PROVISORIAPP03': 'Serão utilizadas estruturas provisórias como tablados, camarotes e estruturas congêneres destinadas ao público, essas com nível superior a 60 cm de altura do seu piso em relação ao solo?',
     'PROVISORIAPP04': 'Serão utilizados grandes brinquedos mecânicos denominados “atrações”, como os de parques temáticos ou de diversão?',
+    'TEM_PIRO': 'Haverá espetáculo pirotécnico no evento?',
     
     // MÉDIO PORTE
     'CGMP01': 'O evento será realizado ao ar livre, sem delimitação de área, com a montagem de alguma estrutura (ou GLP) que exceda os limites permitidos para isenção ou eventos de pequeno porte?',
