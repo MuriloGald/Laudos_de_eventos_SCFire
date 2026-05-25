@@ -12,6 +12,11 @@ window.Pages.Dashboard = function() {
     const clientes = window.Store.getClientes();
     const eventos = window.Store.getEventos();
     
+    // Calcular eventos por tamanho
+    const p = eventos.filter(e => e.porteFinal === 'pequeno').length;
+    const m = eventos.filter(e => e.porteFinal === 'medio').length;
+    const g = eventos.filter(e => e.porteFinal === 'grande').length;
+    
     container.innerHTML = `
         <div class="dashboard-stats">
             <div class="stat-card">
@@ -28,7 +33,7 @@ window.Pages.Dashboard = function() {
             
             <div class="stat-card">
                 <i class="fas fa-chart-pie stat-icon" style="color: var(--accent-gold);"></i>
-                <div class="stat-value">0</div>
+                <div class="stat-value" style="font-size: 1.4rem;">P: ${p} <span style="color:#ccc">|</span> M: ${m} <span style="color:#ccc">|</span> G: ${g}</div>
                 <div class="stat-label">Eventos por Tamanho</div>
             </div>
         </div>
